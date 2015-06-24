@@ -84,7 +84,8 @@ int main( int argc, char *argv[] )
 {
   CardMask deadCards, cards, playerCards[MAX_PLAYERS], pCards;
   HandVal handval[MAX_PLAYERS], maxHand;
-  int i;
+  int i, flag = 0;
+  char handName[1024];
   unsigned long winCount[MAX_PLAYERS], loseCount[MAX_PLAYERS], 
     tieCount[MAX_PLAYERS], handCount=0, nWinners;
   float ev[MAX_PLAYERS];
@@ -123,8 +124,14 @@ int main( int argc, char *argv[] )
                             ++nWinners;
                         };
 
+                        flag = 0;
                         for (i=0; i<gNPlayers; i++) {
                           if (handval[i] == maxHand) {
+                            if (flag == 0) {
+                              StdRules_HandVal_toString(handval[i], handName);
+                              printf("DEBUG: handval[%d] == %d, name: %s\n", i, handval[i], handName);
+                              flag = 1;
+                            }
                             if (nWinners == 1) {
                               ++winCount[i];
                               ev[i] += 1.0;
