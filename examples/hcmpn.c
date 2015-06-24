@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
                           if (handval[i] == maxHand) {
                             if (flag == 0) {
                               StdRules_HandVal_toString(handval[i], handName);
-                              printf("DEBUG: handval[%d] == %d, name: %s\n", i, handval[i], handName);
+                              printf("DEBUG: handval %d => %d %s\n", i, handval[i], handName);
                               flag = 1;
                             }
                             if (nWinners == 1) {
