@@ -72,7 +72,7 @@
 #define PACKAGE_VERSION "138.0"
 
 /* The size of `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
+#define SIZEOF_LONG sizeof(long)
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1

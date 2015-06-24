@@ -40,6 +40,7 @@
 #endif
 
 #include <string.h>
+#include <sys/stat.h>
 
 typedef enum {
   MAY_HAVE_FOUR_OF_A_KIND  = (1 << 0),
