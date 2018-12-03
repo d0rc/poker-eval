@@ -4,7 +4,6 @@ project(poker_eval)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
-    examples/hcmpn.c
     include/inlines/eval.h
     include/inlines/eval_astud.h
     include/inlines/eval_joker.h
@@ -78,5 +77,6 @@ set(SOURCE_FILES
     lib/generated/t_toptwobits.c)
 
 include_directories(include/)
-add_executable(hcmpn ${SOURCE_FILES})
+add_executable(hcmpn ${SOURCE_FILES} examples/hcmpn.c)
+add_executable(pokenum ${SOURCE_FILES} examples/pokenum.c)
 set_target_properties(hcmpn PROPERTIES COMPILE_FLAGS -DCARDS_DEALT=5)

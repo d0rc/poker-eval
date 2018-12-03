@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "poker_defs.h"
-#include "enumdefs.h"
 #include "inlines/eval.h"
 
 #define MAX_PLAYERS 22
@@ -37,14 +36,11 @@ CardMask gDeadCards, gCommonCards, gPlayerCards[MAX_PLAYERS];
 
 
 static void
-parseArgs(int argc, char **argv, enum_game_t *game) {
+parseArgs(int argc, char **argv) {
   int i, seenSep = 0, cardCount = 0, c;
 
-  *game = game_holdem;
-
   for (i = 1; i < argc; ++i) {
-    if (strcmp(argv[i], "-o") == 0) { *game = game_omaha; }
-    else if (argv[i][0] == '-') {
+    if (argv[i][0] == '-') {
       if (strcmp(argv[i], "-d") == 0) {
 	    if (++i == argc) goto error;
         if (StdDeck_stringToCard(argv[i], &c) == 0)
@@ -66,11 +62,7 @@ parseArgs(int argc, char **argv, enum_game_t *game) {
         ++gNCommon;
       }
       else {
-        int i;
-        if (game == game_holdem)
-          i = cardCount / 2;
-        else
-          i = cardCount / 4;
+        int i = cardCount / 2;
         StdDeck_CardMask_SET(gPlayerCards[i], c);
         gNPlayers = i+1;
         ++cardCount;
@@ -83,14 +75,13 @@ parseArgs(int argc, char **argv, enum_game_t *game) {
   return;
 
  error:
-  fprintf(stderr, "Usage: hcmpn [ -o ] [ -d dead-card ] p1-cards .. pn-cards [ -- common-cards ]\n");
+  fprintf(stderr, "Usage: hcmpn [ -d dead-card ] p1-cards .. pn-cards [ -- common-cards ]\n");
   exit(0);
 }
 
 
 int main( int argc, char *argv[] )
 {
-  enum_game_t game;
   CardMask deadCards, cards, playerCards[MAX_PLAYERS], pCards;
   HandVal handval[MAX_PLAYERS], maxHand;
   int i, flag = 0;
@@ -109,7 +100,7 @@ int main( int argc, char *argv[] )
     loseCount[i] = 0;
     ev[i] = 0;
   };
-  parseArgs(argc, argv, &game);
+  parseArgs(argc, argv);
   
   deadCards = gDeadCards;
   for (i=0; i<gNPlayers; i++) {
@@ -117,23 +108,20 @@ int main( int argc, char *argv[] )
     CardMask_OR(deadCards, deadCards, playerCards[i]);
   };
 
-  ENUMERATE_N_CARDS_D(cards, 5-gNCommon, deadCards, 
+  ENUMERATE_N_CARDS_D(cards, 5-gNCommon, deadCards,
                       {
                         ++handCount;
                         nWinners = 0;
                         maxHand = HandVal_NOTHING;
                         for (i=0; i<gNPlayers; i++) {
                           CardMask_OR(pCards, playerCards[i], cards);
-                          if (game == game_holdem) {
-                            handval[i] = Hand_EVAL_N(pCards, 7);
-                          }else {
-                            handval[i] = Hand_EVAL_N(pCards, 9);
-                          }
+                          handval[i] = Hand_EVAL_N(pCards, 7);
+
                           if (handval[i] > maxHand) {
                             nWinners = 1;
                             maxHand = handval[i];
                           }
-                          else if (handval[i] == maxHand) 
+                          else if (handval[i] == maxHand)
                             ++nWinners;
                         };
 

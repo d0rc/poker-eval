@@ -284,6 +284,9 @@ main(int argc, char **argv) {
       if (enumType == ENUM_EXHAUSTIVE) {
         err = enumExhaustive(game, pockets, board, dead, npockets, nboard,
                              orderflag, &result);
+        char handName[1024];
+        StdRules_HandVal_toString(result.nwinhi[0], handName);
+        printf("  HI %d (%s)\n", result.nwinhi[1], handName);
       } else if (enumType == ENUM_SAMPLE) {
         err = enumSample(game, pockets, board, dead, npockets, nboard, niter,
                          orderflag, &result);
