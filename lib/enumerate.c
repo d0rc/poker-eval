@@ -215,7 +215,7 @@ static enum_gameparams_t enum_gameparams[] = {
     StdDeck_CardMask_OR(_finalBoard, board, sharedCards);		\
     err = StdDeck_OmahaHiLow8_EVAL(pockets[i], _finalBoard,		\
                                    &hival[i], NULL);			\
-    printf("Debug Hand: %d [%d]: ", i, hival[i]); \
+    printf("DEBUG: handval %d => %d ", i, hival[i]); \
     StdRules_HandVal_print(hival[i]); \
     printf("\n");   \
     loval[i] = LowHandVal_NOTHING;					\
