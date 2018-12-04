@@ -124,6 +124,7 @@ StdDeck_OmahaHiLow8_EVAL(StdDeck_CardMask hole, StdDeck_CardMask board,
   }
   if (hival != NULL) *hival = besthi;
   if (loval != NULL) *loval = bestlo;
+
   return 0;
 }
 

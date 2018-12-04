@@ -42,14 +42,14 @@ parseArgs(int argc, char **argv) {
   for (i = 1; i < argc; ++i) {
     if (argv[i][0] == '-') {
       if (strcmp(argv[i], "-d") == 0) {
-	if (++i == argc) goto error;
+	    if (++i == argc) goto error;
         if (StdDeck_stringToCard(argv[i], &c) == 0)
           goto error;
         if (!CardMask_CARD_IS_SET(gDeadCards, c)) {
           ++gNDead;
           StdDeck_CardMask_SET(gDeadCards, c);
         };
-      } 
+      }
       else if (!strcmp(argv[i], "--"))
         seenSep = 1;
       else
@@ -75,7 +75,7 @@ parseArgs(int argc, char **argv) {
   return;
 
  error:
-  fprintf(stderr, "Usage: hcmp2 [ -d dead-card ] p1-cards .. pn-cards [ -- common-cards ]\n");
+  fprintf(stderr, "Usage: hcmpn [ -d dead-card ] p1-cards .. pn-cards [ -- common-cards ]\n");
   exit(0);
 }
 
@@ -108,7 +108,7 @@ int main( int argc, char *argv[] )
     CardMask_OR(deadCards, deadCards, playerCards[i]);
   };
 
-  ENUMERATE_N_CARDS_D(cards, 5-gNCommon, deadCards, 
+  ENUMERATE_N_CARDS_D(cards, 5-gNCommon, deadCards,
                       {
                         ++handCount;
                         nWinners = 0;
@@ -116,11 +116,12 @@ int main( int argc, char *argv[] )
                         for (i=0; i<gNPlayers; i++) {
                           CardMask_OR(pCards, playerCards[i], cards);
                           handval[i] = Hand_EVAL_N(pCards, 7);
+
                           if (handval[i] > maxHand) {
                             nWinners = 1;
                             maxHand = handval[i];
                           }
-                          else if (handval[i] == maxHand) 
+                          else if (handval[i] == maxHand)
                             ++nWinners;
                         };
 
